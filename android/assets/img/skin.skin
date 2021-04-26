@@ -1,0 +1,56 @@
+{
+    Color: {
+        grey: {
+            hex: #4e4e4e
+        }
+    }
+    BitmapFont: {
+        regularSmall: {
+            file: fnt/regular.fnt
+            scaledSize: 16
+            markupEnabled: true
+        }
+        regularMedium: {
+            file: fnt/regular.fnt
+            scaledSize: 64
+            markupEnabled: true
+        }
+    }
+    LabelStyle: {
+        regularSmall: {
+            font: regularSmall
+            fontColor: grey
+        }
+        regularMedium: {
+            font: regularMedium
+            fontColor: grey
+        }
+    }
+    CheckBoxStyle: {
+        cash: {
+            font: regularMedium
+            checkboxOn: menu/cash/on
+            checkboxOff: menu/cash/off
+        }
+        potion: {
+            font: regularMedium
+            checkboxOn: menu/potion/on
+            checkboxOff: menu/potion/off
+        }
+    }
+    ButtonStyle: {
+        inventoryLeft: {
+            up: menu/left
+        }
+        inventoryRight: {
+            up: menu/right
+        }
+    }
+    TextButtonStyle: {
+        menu: {
+            up: menu/button
+            font: regularSmall
+            fontColor: grey
+        }
+    }
+}
