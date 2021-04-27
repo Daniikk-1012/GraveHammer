@@ -33,6 +33,9 @@ public class MyGdxGame extends Game {
     private Music stepMusic;
 
     private Sound hitSound;
+    private Sound sellSound;
+    private Sound throwSound;
+    private Sound brewSound;
     private Sound deathSound;
     
     private ParticleEffectActor hitParticleEffectActor;
@@ -71,6 +74,9 @@ public class MyGdxGame extends Game {
         stepMusic.setLooping(true);
 
         hitSound = Gdx.audio.newSound(Gdx.files.internal("snd/hit.mp3"));
+        sellSound = Gdx.audio.newSound(Gdx.files.internal("snd/sell.mp3"));
+        throwSound = Gdx.audio.newSound(Gdx.files.internal("snd/throw.mp3"));
+        brewSound = Gdx.audio.newSound(Gdx.files.internal("snd/brew.mp3"));
         deathSound = Gdx.audio.newSound(Gdx.files.internal("snd/death.mp3"));
 
         hitParticleEffectActor = new ParticleEffectActor(
@@ -94,6 +100,9 @@ public class MyGdxGame extends Game {
         hitParticleEffectActor.dispose();
 
         deathSound.dispose();
+        brewSound.dispose();
+        throwSound.dispose();
+        sellSound.dispose();
         hitSound.dispose();
 
         stepMusic.dispose();
@@ -139,6 +148,18 @@ public class MyGdxGame extends Game {
 
     public void playHitSound() {
         hitSound.play();
+    }
+
+    public void playSellSound() {
+        sellSound.play();
+    }
+
+    public void playThrowSound() {
+        throwSound.play();
+    }
+
+    public void playBrewSound() {
+        brewSound.play();
     }
 
     public void playerDeathSound() {

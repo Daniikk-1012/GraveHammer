@@ -152,6 +152,7 @@ public class GameScreen implements Screen {
     private int popularity = 10;
     private int playerHealth = PLAYER_HEALTH_MAX;
     private int money;
+    private boolean playerWalks;
     private boolean playerRight = true;
     private float playerWalkAnimationTime;
 
@@ -623,6 +624,7 @@ public class GameScreen implements Screen {
                     }
                     inventory.removeIndex(index);
                     setInventoryPage(inventoryPage);
+                    MyGdxGame.getInstance().playSellSound();
                 }
             }
         });
@@ -656,6 +658,7 @@ public class GameScreen implements Screen {
                                 PotionType.values().length - 1)]);
                     setInventoryPage(inventoryPage);
                     potion.clear();
+                    MyGdxGame.getInstance().playBrewSound();
                 } else {
                     final int index = getInventoryIndex(
                             inventoryPage,
@@ -670,6 +673,7 @@ public class GameScreen implements Screen {
                                 potionButton.setText("Brew");
                             }
                             setInventoryPage(inventoryPage);
+                            MyGdxGame.getInstance().playThrowSound();
                         }
                     }
                 }
@@ -727,6 +731,8 @@ public class GameScreen implements Screen {
                         if(zombieCount == zombieCountMax
                                 && zombieKilledCount == zombieCount) {
                             menuWrapperTable.setVisible(false);
+                            MyGdxGame.getInstance().stopBarMusic();
+                            MyGdxGame.getInstance().playWaveMusic();
                             newWave();
                         }
                         return true;
@@ -889,6 +895,7 @@ public class GameScreen implements Screen {
         zombieKilledCount++;
 
         if(playerHealth <= 0) {
+            MyGdxGame.getInstance().playerDeathSound();
             popularity -= POPULARITY_DEATH_LOSS;
             if(popularity < 0) {
                 popularity = 0;
@@ -897,6 +904,8 @@ public class GameScreen implements Screen {
         }
         if(zombieCount == zombieCountMax && zombieKilledCount == zombieCount) {
             menuWrapperTable.setVisible(true);
+            MyGdxGame.getInstance().stopWaveMusic();
+            MyGdxGame.getInstance().playBarMusic();
         }
     }
 
@@ -931,6 +940,15 @@ public class GameScreen implements Screen {
             }
         } else if(hammerReturnAnimationTime < HAMMER_RETURN_ANIMATION_TIME) {
             hammerReturnAnimationTime += delta;
+        }
+        if(playerVelocityAction.getVelocityX() == 0f) {
+            if(playerWalks) {
+                playerWalks = false;
+                MyGdxGame.getInstance().stopStepMusic();
+            }
+        } else if(!playerWalks) {
+            playerWalks = true;
+            MyGdxGame.getInstance().playStepMusic();
         }
         zombieSpawnTime += delta;
         while(zombieCount < zombieCountMax
@@ -1188,6 +1206,8 @@ public class GameScreen implements Screen {
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
+        MyGdxGame.getInstance().stopWaveMusic();
+        MyGdxGame.getInstance().stopBarMusic();
     }
 
     @Override
