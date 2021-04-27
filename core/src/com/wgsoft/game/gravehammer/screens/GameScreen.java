@@ -42,6 +42,7 @@ import com.wgsoft.game.gravehammer.actions.overlap.StopOverlapListener;
 import com.wgsoft.game.gravehammer.objects.BooleanHolder;
 import com.wgsoft.game.gravehammer.objects.FloatHolder;
 import com.wgsoft.game.gravehammer.objects.LootType;
+import com.wgsoft.game.gravehammer.objects.PotionBrew;
 import com.wgsoft.game.gravehammer.objects.PotionType;
 import com.wgsoft.game.gravehammer.objects.ZombieState;
 import com.wgsoft.game.gravehammer.objects.ZombieStateHolder;
@@ -140,11 +141,12 @@ public class GameScreen implements Screen {
     private final Label cashCostLabel;
     private final Table potionTable;
 
-    private Array<Object> inventory;
+    private final Array<Object> inventory;
     private int inventoryPage;
     private int inventoryCursorRow, inventoryCursorColumn;
 
-    private Array<LootType> potion;
+    private final LootType[] potion;
+    private int potionSize;
 
     private boolean keyA, keyD;
     private boolean keyLeft, keyRight;
@@ -641,7 +643,7 @@ public class GameScreen implements Screen {
 
         potionTable.row();
 
-        potion = new Array<>();
+        potion = new LootType[POTION_ITEM_COUNT];
         final TextButton potionButton = new TextButton(
                 "Throw",
                 MyGdxGame.getInstance().getSkin(),
@@ -649,15 +651,14 @@ public class GameScreen implements Screen {
         potionButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(potion.size == POTION_ITEM_COUNT) {
+                if(potionSize == POTION_ITEM_COUNT) {
                     potionButton.setText("Throw");
-                    inventory.add(
-                            PotionType.values()[
-                            MathUtils.random(
-                                0,
-                                PotionType.values().length - 1)]);
+                    final PotionType potionType = PotionBrew.brew(potion);
+                    if(potionType != null) {
+                        inventory.add(potionType);
+                    }
+                    potionSize = 0;
                     setInventoryPage(inventoryPage);
-                    potion.clear();
                     MyGdxGame.getInstance().playBrewSound();
                 } else {
                     final int index = getInventoryIndex(
@@ -667,9 +668,10 @@ public class GameScreen implements Screen {
                     if(inventory.size > index) {
                         final Object item = inventory.get(index);
                         if(item instanceof LootType) {
-                            potion.add((LootType)item);
+                            potion[potionSize] = (LootType)item;
+                            potionSize++;
                             inventory.removeIndex(index);
-                            if(potion.size == POTION_ITEM_COUNT) {
+                            if(potionSize == POTION_ITEM_COUNT) {
                                 potionButton.setText("Brew");
                             }
                             setInventoryPage(inventoryPage);
