@@ -599,12 +599,10 @@ public class GameScreen implements Screen {
         cashSellButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                final int index = inventoryPage
-                    * MENU_INVENTORY_ROWS
-                    * MENU_INVENTORY_COLUMNS
-                    + inventoryCursorRow
-                    * MENU_INVENTORY_COLUMNS
-                    + inventoryCursorColumn;
+                final int index = getInventoryIndex(
+                        inventoryPage,
+                        inventoryCursorRow,
+                        inventoryCursorColumn);
                 if(inventory.size > index) {
                     final Object item = inventory.get(index);
                     if(item instanceof LootType) {
@@ -664,12 +662,10 @@ public class GameScreen implements Screen {
                     setInventoryPage(inventoryPage);
                     potion.clear();
                 } else {
-                    final int index = inventoryPage
-                        * MENU_INVENTORY_ROWS
-                        * MENU_INVENTORY_COLUMNS
-                        + inventoryCursorRow
-                        * MENU_INVENTORY_COLUMNS
-                        + inventoryCursorColumn;
+                    final int index = getInventoryIndex(
+                            inventoryPage,
+                            inventoryCursorRow,
+                            inventoryCursorColumn);
                     if(inventory.size > index) {
                         final Object item = inventory.get(index);
                         if(item instanceof LootType) {
@@ -824,12 +820,7 @@ public class GameScreen implements Screen {
     private void setInventoryPage(int page) {
         for(int i = 0; i < itemImages.length; i++) {
             for(int j = 0; j < itemImages[i].length; j++) {
-                final int index = page
-                    * MENU_INVENTORY_ROWS
-                    * MENU_INVENTORY_COLUMNS
-                    + i
-                    * MENU_INVENTORY_COLUMNS
-                    + j;
+                final int index = getInventoryIndex(page, i, j);
                 if(inventory.size > index) {
                     final Object item = inventory.get(index);
                     if(item instanceof LootType) {
@@ -854,12 +845,8 @@ public class GameScreen implements Screen {
         cashItemImage.setDrawable(
                 itemImages[inventoryCursorRow][inventoryCursorColumn]
                 .getDrawable());
-        final int index = inventoryPage
-            * MENU_INVENTORY_ROWS
-            * MENU_INVENTORY_COLUMNS
-            + inventoryCursorRow
-            * MENU_INVENTORY_COLUMNS
-            + inventoryCursorColumn;
+        final int index = getInventoryIndex(
+                inventoryPage, inventoryCursorRow, inventoryCursorColumn);
         if(inventory.size > index) {
             final Object item = inventory.get(index);
             if(item instanceof LootType) {
@@ -880,6 +867,15 @@ public class GameScreen implements Screen {
             cashItemLabel.setText("No item selected");
             cashCostLabel.setText("0");
         }
+    }
+
+    private int getInventoryIndex(int page, int row, int column) {
+        return page
+            * MENU_INVENTORY_ROWS
+            * MENU_INVENTORY_COLUMNS
+            + row
+            * MENU_INVENTORY_COLUMNS
+            + column;
     }
 
     private void killZombie(ZombieStateHolder zombieState,
