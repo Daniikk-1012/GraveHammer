@@ -942,10 +942,6 @@ public class GameScreen implements Screen {
         zombieSpawnTime += delta;
         while(zombieCount < zombieCountMax
                 && zombieSpawnTime >= ZOMBIE_SPAWN_INTERVAL) {
-            class FloatHolder {
-                float value;
-            }
-
             final ZombieStateHolder zombieState = new ZombieStateHolder();
             zombieState.value = ZombieState.UP;
             final BooleanHolder zombieRight = new BooleanHolder();
