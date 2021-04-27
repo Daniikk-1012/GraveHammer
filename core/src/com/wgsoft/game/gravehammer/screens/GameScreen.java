@@ -40,6 +40,7 @@ import com.wgsoft.game.gravehammer.actions.bounds.StopBoundsListener;
 import com.wgsoft.game.gravehammer.actions.outofbounds.RemoveOutOfBoundsListener;
 import com.wgsoft.game.gravehammer.actions.overlap.StopOverlapListener;
 import com.wgsoft.game.gravehammer.objects.BooleanHolder;
+import com.wgsoft.game.gravehammer.objects.FloatHolder;
 import com.wgsoft.game.gravehammer.objects.LootType;
 import com.wgsoft.game.gravehammer.objects.PotionType;
 import com.wgsoft.game.gravehammer.objects.ZombieState;
