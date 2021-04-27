@@ -608,26 +608,21 @@ public class GameScreen implements Screen {
                     if(item instanceof LootType) {
                         money += (int)(
                                 ((LootType)item).getCost()
-                                * (float)((LootType)item).getPopularity()
+                                * popularity
                                 / POPULARITY_MAX);
                         popularity += ((LootType)item).getPopularity();
-                        if(popularity > POPULARITY_MAX) {
-                            popularity = POPULARITY_MAX;
-                        }
-                        inventory.removeIndex(index);
-                        setInventoryPage(inventoryPage);
                     } else if(item instanceof PotionType) {
                         money += (int)(
                                 ((PotionType)item).getCost()
-                                * (float)((PotionType)item).getPopularity()
+                                * popularity
                                 / POPULARITY_MAX);
                         popularity += ((PotionType)item).getPopularity();
-                        if(popularity > POPULARITY_MAX) {
-                            popularity = POPULARITY_MAX;
-                        }
-                        inventory.removeIndex(index);
-                        setInventoryPage(inventoryPage);
                     }
+                    if(popularity > POPULARITY_MAX) {
+                        popularity = POPULARITY_MAX;
+                    }
+                    inventory.removeIndex(index);
+                    setInventoryPage(inventoryPage);
                 }
             }
         });
@@ -669,14 +664,12 @@ public class GameScreen implements Screen {
                     if(inventory.size > index) {
                         final Object item = inventory.get(index);
                         if(item instanceof LootType) {
-                            if(potion.size < POTION_ITEM_COUNT) {
-                                potion.add((LootType)item);
-                                inventory.removeIndex(index);
-                                if(potion.size == POTION_ITEM_COUNT) {
-                                    potionButton.setText("Brew");
-                                }
-                                setInventoryPage(inventoryPage);
+                            potion.add((LootType)item);
+                            inventory.removeIndex(index);
+                            if(potion.size == POTION_ITEM_COUNT) {
+                                potionButton.setText("Brew");
                             }
+                            setInventoryPage(inventoryPage);
                         }
                     }
                 }
@@ -854,13 +847,13 @@ public class GameScreen implements Screen {
                 cashCostLabel.setText(
                         (int)(
                             ((LootType)item).getCost()
-                            * (float)((LootType)item).getPopularity()
+                            * popularity
                             / POPULARITY_MAX));
             } else if(item instanceof PotionType) {
                 cashItemLabel.setText(((PotionType)item).getDescription());
                 cashCostLabel.setText((int)(
                             ((PotionType)item).getCost()
-                            * (float)((PotionType)item).getPopularity()
+                            * popularity
                             / POPULARITY_MAX));
             }
         } else {
