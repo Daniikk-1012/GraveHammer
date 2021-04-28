@@ -1,10 +1,10 @@
 package com.wgsoft.game.gravehammer.objects;
 
 public enum LootType {
-    BRAIN("brain", "Brain", 1, 1),
-    EAR("ear", "Ear", 1, 1),
-    EYE("eye", "Eye", 1, 1),
-    FINGER("finger", "Finger", 1, 1);
+    BRAIN("brain", "Brain", 2, 0),
+    EAR("ear", "Ear", 2, 0),
+    EYE("eye", "Eye", 2, 0),
+    FINGER("finger", "Finger", 2, 0);
 
     private String name;
     private String description;
