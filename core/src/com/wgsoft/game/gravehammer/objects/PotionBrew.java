@@ -13,32 +13,32 @@ public class PotionBrew {
                 LootType.BRAIN,
                 LootType.EYE,
                 LootType.EAR,
-        }, PotionType.BLUE);
+        }, PotionType.VAN_GOGH);
         recipeMap.put(new LootType[] {
                 LootType.FINGER,
                 LootType.EYE,
                 LootType.EYE,
-        }, PotionType.CYAN);
+        }, PotionType.BONER);
         recipeMap.put(new LootType[] {
                 LootType.BRAIN,
                 LootType.BRAIN,
                 LootType.BRAIN,
-        }, PotionType.GREEN);
+        }, PotionType.BIG_BABY_HEAD);
         recipeMap.put(new LootType[] {
                 LootType.EAR,
                 LootType.EAR,
                 LootType.BRAIN,
-        }, PotionType.PINK);
+        }, PotionType.EARDRINK);
         recipeMap.put(new LootType[] {
                 LootType.FINGER,
                 LootType.EAR,
                 LootType.FINGER,
-        }, PotionType.RED);
+        }, PotionType.TICKLED_EAR);
         recipeMap.put(new LootType[] {
                 LootType.FINGER,
                 LootType.FINGER,
                 LootType.FINGER,
-        }, PotionType.YELLOW);
+        }, PotionType.PULL_A_FINGER);
     }
 
     public static PotionType brew(LootType[] input) {

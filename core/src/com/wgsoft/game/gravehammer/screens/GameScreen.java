@@ -112,8 +112,9 @@ public class GameScreen implements Screen {
     private static final float MENU_COIN_PADDING = 8f;
     private static final float MENU_BUTTON_WIDTH = 112f;
     private static final float MENU_BUTTON_HEIGHT = 56f;
-    private static final float MENU_CAULDRON_WIDTH = 176f;
+    private static final float MENU_CAULDRON_WIDTH = 112f;
     private static final float MENU_CAULDRON_HEIGHT = 128f;
+    private static final float MENU_CAUDRON_PADDING = 8f;
     private static final float MENU_OFFSET_HEIGHT = 64f;
 
     private static GameScreen instance;
@@ -639,7 +640,8 @@ public class GameScreen implements Screen {
         final Image potionCauldronImage = new Image(
                 MyGdxGame.getInstance().getSkin(), "menu/cauldron");
         potionTable.add(potionCauldronImage)
-            .size(MENU_CAULDRON_WIDTH, MENU_CAULDRON_HEIGHT);
+            .size(MENU_CAULDRON_WIDTH, MENU_CAULDRON_HEIGHT)
+            .pad(MENU_CAUDRON_PADDING);
 
         potionTable.row();
 

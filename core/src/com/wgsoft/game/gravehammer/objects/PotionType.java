@@ -1,12 +1,12 @@
 package com.wgsoft.game.gravehammer.objects;
 
 public enum PotionType {
-    BLUE("blue", "Van Gogh", 25, 20),
-    CYAN("cyan", "Boner", 15, 12),
-    GREEN("green", "Big baby head", 10, 5),
-    PINK("pink", "Eardrink", 3, 10),
-    RED("red", "Tickled ear", 5, 7),
-    YELLOW("yellow", "Pull a finger", 20, 13);
+    VAN_GOGH("van-gogh", "Van Gogh", 25, 20),
+    BONER("boner", "Boner", 15, 12),
+    BIG_BABY_HEAD("big-baby-head", "Big baby head", 10, 5),
+    EARDRINK("eardrink", "Eardrink", 3, 10),
+    TICKLED_EAR("tickled-ear", "Tickled ear", 5, 7),
+    PULL_A_FINGER("pull-a-finger", "Pull a finger", 20, 13);
 
     private String name;
     private String description;
