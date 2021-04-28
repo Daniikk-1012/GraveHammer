@@ -48,6 +48,8 @@ import com.wgsoft.game.gravehammer.objects.ZombieState;
 import com.wgsoft.game.gravehammer.objects.ZombieStateHolder;
 
 public class GameScreen implements Screen {
+    private static final float MAX_DELTA_TIME = 0.04f;
+
     private static final float GRAVITY = 1024f;
 
     private static final float GROUND_HEIGHT = 256f;
@@ -920,7 +922,13 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void render(final float delta) {
+    public void render(float _delta) {
+        final float delta;
+        if(_delta > MAX_DELTA_TIME) {
+            delta = MAX_DELTA_TIME;
+        } else {
+            delta = _delta;
+        }
         playerWalkAnimationTime += delta;
         if(hammerAnimationTime < HAMMER_ANIMATION_TIME) {
             hammerAnimationTime += delta;
