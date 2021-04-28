@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
     private static final float HAMMER_ANGLE_MIN = 90f;
     private static final float HAMMER_ANGLE_MAX = -120f;
     private static final float HIT_PARTICLES_DISTANCE = 150f;
-    private static final float HAMMER_TRIGGER_WIDTH = 128f;
+    private static final float HAMMER_TRIGGER_WIDTH = 150f;
     private static final float HAMMER_TRIGGER_HEIGHT = 128f;
     private static final float HAMMER_TRIGGER_DISTANCE = 150f;
 
