@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -735,8 +736,8 @@ public class GameScreen implements Screen {
                         playerWalkAnimationTime = 0f;
                         return true;
                     case Input.Keys.ESCAPE:
-                        if(zombieCount == zombieCountMax
-                                && zombieKilledCount == zombieCount) {
+                        if(zombieCount >= zombieCountMax
+                                && zombieKilledCount >= zombieCount) {
                             menuWrapperTable.setVisible(false);
                             MyGdxGame.getInstance().stopBarMusic();
                             MyGdxGame.getInstance().playWaveMusic();
@@ -887,17 +888,27 @@ public class GameScreen implements Screen {
     private void killZombie(ZombieStateHolder zombieState,
             Group zombieGroup,
             VelocityAction zombieVelocityAction,
+            AccelerationAction zombieAccelerationAction,
             RepeatAction zombieControlRepeatAction,
             RepeatAction zombieStopOverlapRepeatAction,
             RepeatAction zombieHammerOverlapRepeatAction,
-            RepeatAction zombiePlayerOverlapRepeatAction) {
+            RepeatAction zombiePlayerOverlapRepeatAction,
+            SequenceAction zombieSequenceAction) {
         zombieGroup.removeAction(zombieControlRepeatAction);
         zombieGroup.removeAction(zombieStopOverlapRepeatAction);
         zombieGroup.removeAction(zombieHammerOverlapRepeatAction);
         zombieGroup.removeAction(zombiePlayerOverlapRepeatAction);
+        zombieGroup.removeAction(zombieSequenceAction);
         zombieVelocityAction.setVelocityX(0f);
         zombieVelocityAction.setVelocityY(-ZOMBIE_DOWN_IMPULSE);
         zombieState.value = ZombieState.DOWN;
+
+        if(zombieAccelerationAction.getActor() == null){
+            zombieGroup.addAction(Actions.forever(zombieAccelerationAction));
+        }
+        if(zombieVelocityAction.getActor() == null) {
+            zombieGroup.addAction(Actions.forever(zombieVelocityAction));
+        }
 
         zombieKilledCount++;
 
@@ -909,7 +920,7 @@ public class GameScreen implements Screen {
             }
             clearArea();
         }
-        if(zombieCount == zombieCountMax && zombieKilledCount == zombieCount) {
+        if(zombieCount >= zombieCountMax && zombieKilledCount >= zombieCount) {
             menuWrapperTable.setVisible(true);
             MyGdxGame.getInstance().stopWaveMusic();
             MyGdxGame.getInstance().playBarMusic();
@@ -1029,6 +1040,32 @@ public class GameScreen implements Screen {
                 Actions.action(OverlapAction.class);
             final RepeatAction zombiePlayerOverlapRepeatAction =
                 Actions.forever(zombiePlayerOverlapAction);
+            final SequenceAction zombieSequenceAction = Actions.sequence(
+                    Actions.moveBy(
+                        0f,
+                        groundImage.getTop() - zombieGroup.getY(),
+                        ZOMBIE_EXIT_TIME),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            zombieGroup.addAction(
+                                    Actions.forever(
+                                        zombieAccelerationAction));
+                            zombieGroup.addAction(
+                                    zombieControlRepeatAction);
+                            zombieGroup.addAction(
+                                    Actions.forever(zombieVelocityAction));
+                            zombieGroup.addAction(
+                                    zombieStopOverlapRepeatAction);
+                            zombieGroup.addAction(
+                                    Actions.forever(
+                                        zombieOutOfBoundsAction));
+                            zombieGroup.addAction(
+                                    zombiePlayerOverlapRepeatAction);
+                            zombieState.value = ZombieState.ACTIVE;
+                            zombieAnimationTime.value = 0f;
+                        }
+                    }));
             zombieHammerOverlapAction.setListener(new OverlapAction.Listener() {
                 @Override
                 public boolean onOverlap(Actor actor) {
@@ -1036,10 +1073,12 @@ public class GameScreen implements Screen {
                         killZombie(zombieState,
                                 zombieGroup,
                                 zombieVelocityAction,
+                                zombieAccelerationAction,
                                 zombieControlRepeatAction,
                                 zombieStopOverlapRepeatAction,
                                 zombieHammerOverlapRepeatAction,
-                                zombiePlayerOverlapRepeatAction);
+                                zombiePlayerOverlapRepeatAction,
+                                zombieSequenceAction);
 
                         final LootType lootType = LootType.values()[
                             MathUtils.random(0, LootType.values().length - 1)];
@@ -1114,44 +1153,19 @@ public class GameScreen implements Screen {
                         killZombie(zombieState,
                                 zombieGroup,
                                 zombieVelocityAction,
+                                zombieAccelerationAction,
                                 zombieControlRepeatAction,
                                 zombieStopOverlapRepeatAction,
                                 zombieHammerOverlapRepeatAction,
-                                zombiePlayerOverlapRepeatAction);
+                                zombiePlayerOverlapRepeatAction,
+                                zombieSequenceAction);
                         return true;
                     }
                     return false;
                 }
             });
-            zombieGroup.addAction(
-                    Actions.sequence(
-                        Actions.moveBy(
-                            0f,
-                            groundImage.getTop() - zombieGroup.getY(),
-                            ZOMBIE_EXIT_TIME),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                zombieGroup.addAction(
-                                        Actions.forever(
-                                            zombieAccelerationAction));
-                                zombieGroup.addAction(
-                                        zombieControlRepeatAction);
-                                zombieGroup.addAction(
-                                        Actions.forever(zombieVelocityAction));
-                                zombieGroup.addAction(
-                                        zombieStopOverlapRepeatAction);
-                                zombieGroup.addAction(
-                                        Actions.forever(
-                                            zombieOutOfBoundsAction));
-                                zombieGroup.addAction(
-                                        zombieHammerOverlapRepeatAction);
-                                zombieGroup.addAction(
-                                        zombiePlayerOverlapRepeatAction);
-                                zombieState.value = ZombieState.ACTIVE;
-                                zombieAnimationTime.value = 0f;
-                            }
-                        })));
+            zombieGroup.addAction(zombieSequenceAction);
+            zombieGroup.addAction(zombieHammerOverlapRepeatAction);
 
             final Image zombieImage = new Image(
                     MyGdxGame.getInstance().getSkin(), "zombie/stand");
