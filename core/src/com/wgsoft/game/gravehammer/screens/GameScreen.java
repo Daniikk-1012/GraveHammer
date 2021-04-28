@@ -816,6 +816,8 @@ public class GameScreen implements Screen {
         playerVelocityAction.setVelocityY(0f);
         playerGroup.setPosition(0f, groundImage.getTop());
         gameGroup.addActor(playerGroup);
+        gameGroup.addActor(hammerTriggerActor);
+        gameGroup.addActor(MyGdxGame.getInstance().getHitParticleEffectActor());
 
         hammerAnimationTime = HAMMER_ANIMATION_TIME;
         hammerReturnAnimationTime = HAMMER_RETURN_ANIMATION_TIME;
