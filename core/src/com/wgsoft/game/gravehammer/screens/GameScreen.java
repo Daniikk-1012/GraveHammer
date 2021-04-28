@@ -54,6 +54,7 @@ public class GameScreen implements Screen {
 
     private static final float GROUND_HEIGHT = 256f;
 
+    private static final int POPULARIT_DEFAULT = 50;
     private static final int POPULARITY_MAX = 100;
     private static final int POPULARITY_DEATH_LOSS = 30;
     
@@ -154,7 +155,7 @@ public class GameScreen implements Screen {
     private boolean keyA, keyD;
     private boolean keyLeft, keyRight;
 
-    private int popularity = 10;
+    private int popularity = POPULARIT_DEFAULT;
     private int playerHealth = PLAYER_HEALTH_MAX;
     private int money;
     private boolean playerWalks;
