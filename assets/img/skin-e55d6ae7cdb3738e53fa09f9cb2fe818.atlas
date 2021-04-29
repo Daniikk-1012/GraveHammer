@@ -1,0 +1,300 @@
+
+skin.png
+size: 2048, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+badlogic
+  rotate: false
+  xy: 2, 114
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+coin
+  rotate: false
+  xy: 2006, 1596
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+e
+  rotate: false
+  xy: 2024, 1614
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+ground
+  rotate: false
+  xy: 398, 373
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+hammer
+  rotate: false
+  xy: 640, 510
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+heart
+  rotate: false
+  xy: 260, 278
+  size: 9, 8
+  orig: 9, 8
+  offset: 0, 0
+  index: -1
+house
+  rotate: false
+  xy: 2, 48
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+html/background
+  rotate: false
+  xy: 2, 544
+  size: 1920, 1080
+  orig: 1920, 1080
+  offset: 0, 0
+  index: -1
+html/button
+  rotate: false
+  xy: 2, 372
+  size: 394, 170
+  orig: 394, 170
+  offset: 0, 0
+  index: -1
+loot/brain
+  rotate: false
+  xy: 344, 362
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+loot/ear
+  rotate: false
+  xy: 450, 397
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+loot/eye
+  rotate: false
+  xy: 658, 516
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+loot/finger
+  rotate: false
+  xy: 676, 534
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+menu/background
+  rotate: false
+  xy: 260, 306
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+menu/button
+  rotate: false
+  xy: 1942, 1535
+  size: 14, 7
+  orig: 14, 7
+  offset: 0, 0
+  index: -1
+menu/cash/off
+  rotate: false
+  xy: 20, 34
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+menu/cash/on
+  rotate: false
+  xy: 150, 100
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+menu/cauldron
+  rotate: false
+  xy: 2, 12
+  size: 14, 16
+  orig: 14, 16
+  offset: 0, 0
+  index: -1
+menu/cursor
+  rotate: false
+  xy: 432, 379
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+menu/item
+  rotate: false
+  xy: 2, 2
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+menu/left
+  rotate: false
+  xy: 146, 90
+  size: 2, 4
+  orig: 2, 4
+  offset: 0, 0
+  index: -1
+menu/potion/off
+  rotate: false
+  xy: 132, 82
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+menu/potion/on
+  rotate: false
+  xy: 1924, 1512
+  size: 12, 12
+  orig: 12, 12
+  offset: 0, 0
+  index: -1
+menu/right
+  rotate: false
+  xy: 150, 94
+  size: 2, 4
+  orig: 2, 4
+  offset: 0, 0
+  index: -1
+pixel
+  rotate: false
+  xy: 20, 31
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+player/stand
+  rotate: false
+  xy: 132, 96
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+player/walk
+  rotate: false
+  xy: 326, 354
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+player/walk
+  rotate: false
+  xy: 640, 492
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+popularity
+  rotate: false
+  xy: 1924, 1544
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: -1
+potion/big-baby-head
+  rotate: false
+  xy: 278, 296
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+potion/boner
+  rotate: false
+  xy: 326, 344
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+potion/eardrink
+  rotate: false
+  xy: 640, 482
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+potion/pull-a-finger
+  rotate: false
+  xy: 34, 38
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+potion/tickled-ear
+  rotate: false
+  xy: 132, 72
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+potion/van-gogh
+  rotate: false
+  xy: 164, 104
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+sky
+  rotate: false
+  xy: 398, 407
+  size: 240, 135
+  orig: 240, 135
+  offset: 0, 0
+  index: -1
+zombie/down
+  rotate: false
+  xy: 2, 30
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+zombie/stand
+  rotate: false
+  xy: 1924, 1526
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+zombie/up
+  rotate: false
+  xy: 2006, 1608
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+zombie/up
+  rotate: false
+  xy: 260, 288
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
+zombie/walk
+  rotate: false
+  xy: 432, 389
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 0
+zombie/walk
+  rotate: false
+  xy: 658, 526
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: 1
