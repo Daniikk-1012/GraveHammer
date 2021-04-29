@@ -1,5 +1,6 @@
 package com.wgsoft.game.gravehammer;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ParticleEffectActor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.wgsoft.game.gravehammer.screens.GameScreen;
+import com.wgsoft.game.gravehammer.screens.HtmlScreen;
 
 public class MyGdxGame extends Game {
     public static final float WIDTH = 1920f;
@@ -66,6 +68,21 @@ public class MyGdxGame extends Game {
         skin.get("potion", CheckBox.CheckBoxStyle.class)
             .checkboxOff.setMinHeight(64f);
 
+        if(Gdx.app.getType() != Application.ApplicationType.WebGL) {
+            initializeSounds();
+        }
+
+        hitParticleEffectActor = new ParticleEffectActor(
+                Gdx.files.internal("particle/hit"), skin.getAtlas());
+
+        if(Gdx.app.getType() != Application.ApplicationType.WebGL) {
+            setScreen(GameScreen.getInstance());
+        } else {
+            setScreen(HtmlScreen.getInstance());
+        }
+    }
+
+    public void initializeSounds() {
         waveMusic = Gdx.audio.newMusic(Gdx.files.internal("snd/wave.mp3"));
         waveMusic.setLooping(true);
         barMusic = Gdx.audio.newMusic(Gdx.files.internal("snd/bar.mp3"));
@@ -78,11 +95,6 @@ public class MyGdxGame extends Game {
         throwSound = Gdx.audio.newSound(Gdx.files.internal("snd/throw.mp3"));
         brewSound = Gdx.audio.newSound(Gdx.files.internal("snd/brew.mp3"));
         deathSound = Gdx.audio.newSound(Gdx.files.internal("snd/death.mp3"));
-
-        hitParticleEffectActor = new ParticleEffectActor(
-                Gdx.files.internal("particle/hit"), skin.getAtlas());
-
-        setScreen(GameScreen.getInstance());
     }
 
     @Override
@@ -95,6 +107,7 @@ public class MyGdxGame extends Game {
     public void dispose() {
         super.dispose();
 
+        HtmlScreen.getInstance().dispose();
         GameScreen.getInstance().dispose();
 
         hitParticleEffectActor.dispose();

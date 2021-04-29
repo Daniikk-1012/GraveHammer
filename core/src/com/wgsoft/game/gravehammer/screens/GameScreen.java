@@ -1,5 +1,6 @@
 package com.wgsoft.game.gravehammer.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -182,6 +183,15 @@ public class GameScreen implements Screen {
     private float zombieSpawnTime;
 
     private GameScreen() {
+        if(Gdx.app.getType() == Application.ApplicationType.WebGL) {
+            new FillParentAction();
+            new VelocityAction();
+            new AccelerationAction();
+            new OverlapAction();
+            new BoundsAction();
+            new OutOfBoundsAction();
+        }
+
         uiStage = new Stage(
                 new ScreenViewport(), MyGdxGame.getInstance().getSpriteBatch());
         uiStage.getRoot().setTouchable(Touchable.childrenOnly);

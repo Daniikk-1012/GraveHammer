@@ -45,6 +45,9 @@
         inventoryRight: {
             up: menu/right
         }
+        html: {
+            up: html/button
+        }
     }
     TextButtonStyle: {
         menu: {

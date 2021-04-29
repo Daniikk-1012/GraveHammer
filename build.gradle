@@ -9,6 +9,8 @@ buildscript {
         google()
     }
     dependencies {
+        classpath 'org.wisepersist:gwt-gradle-plugin:1.0.13'
+        classpath 'org.gretty:gretty:3.0.2'
         classpath 'com.android.tools.build:gradle:3.5.4'
         classpath 'com.badlogicgames.gdx:gdx-tools:1.10.0'
     }
@@ -20,6 +22,8 @@ task texturePacker {
     doLast {
         def settings = new TexturePacker.Settings()
         settings.combineSubdirectories = true
+        settings.maxWidth = 2048
+        settings.maxHeight = 2048
         TexturePacker.processIfModified(
                 settings,
                 "raw-img",
@@ -81,6 +85,24 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+    }
+}
+
+project(":html") {
+    apply plugin: "java-library"
+    apply plugin: "gwt"
+    apply plugin: "war"
+    apply plugin: "org.gretty"
+
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+        api "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+    }
+
+    compileJava {
+        dependsOn generateResources
     }
 }
 
