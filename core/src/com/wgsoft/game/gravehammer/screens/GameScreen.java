@@ -427,6 +427,24 @@ public class GameScreen implements Screen {
                 MyGdxGame.getInstance().getSkin(), "coin");
         hudTable.add(moneyImage).size(ICON_SIZE).pad(ICON_PADDING);
 
+        hudTable.row();
+        hudTable.add();
+        hudTable.add().expandX();
+
+        final Label popularityLabel = new Label(
+                "", MyGdxGame.getInstance().getSkin(), "regularMedium");
+        popularityLabel.addAction(Actions.forever(Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                popularityLabel.setText(popularity + "%");
+            }
+        })));
+        hudTable.add(popularityLabel).expandX().right();
+
+        final Image popularityImage = new Image(
+                MyGdxGame.getInstance().getSkin(), "popularity");
+        hudTable.add(popularityImage).size(ICON_SIZE).pad(ICON_PADDING);
+
         uiStage.addActor(hudTable);
 
         menuWrapperTable =
