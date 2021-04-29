@@ -63,6 +63,10 @@ public class GameScreen implements Screen {
     private static final float HOUSE_WIDTH = 1024f;
     private static final float HOUSE_HEIGHT = 512f;
 
+    private static final float E_IMAGE_X = 900f;
+    private static final float E_IMAGE_Y = 512f;
+    private static final float E_IMAGE_SIZE = 80f;
+
     private static final int PLAYER_HEALTH_MAX = 100;
     private static final float PLAYER_SIZE = 128f;
     private static final float PLAYER_JUMP_IMPULSE = 512f;
@@ -132,6 +136,7 @@ public class GameScreen implements Screen {
 
     private final Stage uiStage;
 
+    private final Image eImage;
     private final Group gameGroup;
     private final Image groundImage;
     private final Group playerGroup;
@@ -194,6 +199,13 @@ public class GameScreen implements Screen {
         houseImage.setSize(HOUSE_WIDTH, HOUSE_HEIGHT);
         houseImage.setTouchable(Touchable.disabled);
         uiStage.addActor(houseImage);
+
+        eImage = new Image(MyGdxGame.getInstance().getSkin(), "e");
+        eImage.setPosition(E_IMAGE_X, E_IMAGE_Y);
+        eImage.setSize(E_IMAGE_SIZE, E_IMAGE_SIZE);
+        eImage.setTouchable(Touchable.disabled);
+        eImage.setVisible(false);
+        uiStage.addActor(eImage);
 
         gameGroup = new Group();
         final FillParentAction gameFillParentAction =
@@ -723,6 +735,7 @@ public class GameScreen implements Screen {
         uiStage.addActor(menuWrapperTable);
 
         uiStage.addListener(new InputListener() {
+            private boolean inMenu;
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 switch(keycode) {
@@ -731,32 +744,63 @@ public class GameScreen implements Screen {
                                 && hammerAnimationTime
                                 >= HAMMER_ANIMATION_TIME
                                 && hammerReturnAnimationTime
-                                >= HAMMER_RETURN_ANIMATION_TIME) {
+                                >= HAMMER_RETURN_ANIMATION_TIME
+                                && !inMenu) {
                             playerVelocityAction
                                 .setVelocityY(PLAYER_JUMP_IMPULSE);
                             hammerAnimationTime = 0f;
                         }
                         return true;
                     case Input.Keys.A:
-                        keyA = true;
-                        playerWalkAnimationTime = 0f;
+                        if(!inMenu) {
+                            keyA = true;
+                            playerWalkAnimationTime = 0f;
+                        }
                         return true;
                     case Input.Keys.LEFT:
-                        keyLeft = true;
-                        playerWalkAnimationTime = 0f;
+                        if(!inMenu) {
+                            keyLeft = true;
+                            playerWalkAnimationTime = 0f;
+                        }
                         return true;
                     case Input.Keys.D:
-                        keyD = true;
-                        playerWalkAnimationTime = 0f;
+                        if(!inMenu) {
+                            keyD = true;
+                            playerWalkAnimationTime = 0f;
+                        }
                         return true;
                     case Input.Keys.RIGHT:
-                        keyRight = true;
-                        playerWalkAnimationTime = 0f;
+                        if(!inMenu) {
+                            keyRight = true;
+                            playerWalkAnimationTime = 0f;
+                        }
+                        return true;
+                    case Input.Keys.E:
+                        // Only hammerAnimationTime is enough
+                        if(zombieCount >= zombieCountMax
+                                && zombieKilledCount >= zombieCount
+                                && playerGroup.getX() < houseImage.getRight()
+                                && playerGroup.getRight() > houseImage.getX()
+                                && playerGroup.getY() < houseImage.getTop()
+                                && playerGroup.getTop() > houseImage.getY()
+                                && hammerAnimationTime
+                                >= HAMMER_ANIMATION_TIME) {
+                            inMenu = true;
+                            keyA = false;
+                            keyD = false;
+                            keyLeft = false;
+                            keyRight = false;
+                            playerGroup.setVisible(false);
+                            menuWrapperTable.setVisible(true);
+                        }
                         return true;
                     case Input.Keys.ESCAPE:
+                        inMenu = false;
                         if(zombieCount >= zombieCountMax
                                 && zombieKilledCount >= zombieCount) {
                             menuWrapperTable.setVisible(false);
+                            eImage.setVisible(false);
+                            playerGroup.setVisible(true);
                             MyGdxGame.getInstance().stopBarMusic();
                             MyGdxGame.getInstance().playWaveMusic();
                             newWave();
@@ -941,7 +985,7 @@ public class GameScreen implements Screen {
             clearArea();
         }
         if(zombieCount >= zombieCountMax && zombieKilledCount >= zombieCount) {
-            menuWrapperTable.setVisible(true);
+            eImage.setVisible(true);
             MyGdxGame.getInstance().stopWaveMusic();
             MyGdxGame.getInstance().playBarMusic();
         }
