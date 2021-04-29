@@ -759,6 +759,7 @@ public class GameScreen implements Screen {
                             playerVelocityAction
                                 .setVelocityY(PLAYER_JUMP_IMPULSE);
                             hammerAnimationTime = 0f;
+                            MyGdxGame.getInstance().playHitSound();
                         }
                         return true;
                     case Input.Keys.A:
@@ -1020,7 +1021,6 @@ public class GameScreen implements Screen {
             hammerAnimationTime += delta;
             if(hammerAnimationTime >= HAMMER_ANIMATION_TIME) {
                 hammerHit = true;
-                MyGdxGame.getInstance().playHitSound();
                 if(playerRight) {
                     MyGdxGame.getInstance().getHitParticleEffectActor()
                         .setPosition(playerGroup.getX(Align.center)
