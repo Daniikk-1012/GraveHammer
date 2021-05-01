@@ -84,7 +84,7 @@ public class GameScreen implements Screen {
     private static final float HAMMER_TRIGGER_HEIGHT = 128f;
     private static final float HAMMER_TRIGGER_DISTANCE = 150f;
 
-    private static final int ZOMBIE_COUNT_MAX_MIN = 1;
+    private static final int ZOMBIE_COUNT_MAX_MIN = 3;
     private static final int ZOMBIE_DAMAGE = 20;
     private static final float ZOMBIE_SIZE = 128f;
     private static final float ZOMBIE_VELOCITY = 128f;
