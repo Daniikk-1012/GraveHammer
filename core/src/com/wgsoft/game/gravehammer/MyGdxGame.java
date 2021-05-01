@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ParticleEffectActor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.wgsoft.game.gravehammer.screens.GameScreen;
@@ -51,22 +50,16 @@ public class MyGdxGame extends Game {
 
         skin = new Skin(Gdx.files.internal("img/skin.skin"));
         skin.getTiledDrawable("ground").setScale(8f);
-        skin.get("cash", CheckBox.CheckBoxStyle.class)
-            .checkboxOn.setMinWidth(64f);
-        skin.get("cash", CheckBox.CheckBoxStyle.class)
-            .checkboxOn.setMinHeight(64f);
-        skin.get("cash", CheckBox.CheckBoxStyle.class)
-            .checkboxOff.setMinWidth(64f);
-        skin.get("cash", CheckBox.CheckBoxStyle.class)
-            .checkboxOff.setMinHeight(64f);
-        skin.get("potion", CheckBox.CheckBoxStyle.class)
-            .checkboxOn.setMinWidth(64f);
-        skin.get("potion", CheckBox.CheckBoxStyle.class)
-            .checkboxOn.setMinHeight(64f);
-        skin.get("potion", CheckBox.CheckBoxStyle.class)
-            .checkboxOff.setMinWidth(64f);
-        skin.get("potion", CheckBox.CheckBoxStyle.class)
-            .checkboxOff.setMinHeight(64f);
+        skin.getPatch("menu/section").setLeftWidth(16f);
+        skin.getPatch("menu/section").setRightWidth(16f);
+        skin.getPatch("menu/section").setPadLeft(16f);
+        skin.getPatch("menu/section").setPadRight(16f);
+        skin.getPatch("menu/section").setTopHeight(16f);
+        skin.getPatch("menu/section").setBottomHeight(16f);
+        skin.getPatch("menu/section").setPadTop(16f);
+        skin.getPatch("menu/section").setPadBottom(16f);
+        skin.getPatch("menu/section").setMiddleWidth(80f);
+        skin.getPatch("menu/section").setMiddleHeight(80f);
 
         if(Gdx.app.getType() != Application.ApplicationType.WebGL) {
             initializeSounds();

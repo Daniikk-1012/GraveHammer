@@ -10,6 +10,11 @@
             scaledSize: 16
             markupEnabled: true
         }
+        regularSemiSmall: {
+            file: fnt/regular.fnt
+            scaledSize: 32
+            markupEnabled: true
+        }
         regularMedium: {
             file: fnt/regular.fnt
             scaledSize: 64
@@ -21,21 +26,13 @@
             font: regularSmall
             fontColor: grey
         }
+        regularSemiSmall: {
+            font: regularSemiSmall
+            fontColor: grey
+        }
         regularMedium: {
             font: regularMedium
             fontColor: grey
-        }
-    }
-    CheckBoxStyle: {
-        cash: {
-            font: regularMedium
-            checkboxOn: menu/cash/on
-            checkboxOff: menu/cash/off
-        }
-        potion: {
-            font: regularMedium
-            checkboxOn: menu/potion/on
-            checkboxOff: menu/potion/off
         }
     }
     ButtonStyle: {

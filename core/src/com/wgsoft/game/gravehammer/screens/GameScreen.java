@@ -18,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -103,27 +101,32 @@ public class GameScreen implements Screen {
     private static final float ICON_PADDING = 16f;
 
     private static final int POTION_ITEM_COUNT = 3;
-    private static final int MENU_INVENTORY_ROWS = 2;
-    private static final int MENU_INVENTORY_COLUMNS = 3;
-    private static final float MENU_WIDTH = 512f;
-    private static final float MENU_HEIGHT = 512f;
-    private static final float MENU_CHECK_BOX_SIZE = 64f;
-    private static final float MENU_CHECK_BOX_PADDING = 8f;
-    private static final float MENU_CHECK_BOX_TABLE_PADDING_LEFT = 16f;
-    private static final float MENU_CONTENT_HEIGHT = 200f;
+    private static final int MENU_INVENTORY_ROWS = 4;
+    private static final int MENU_INVENTORY_COLUMNS = 5;
+    private static final float MENU_WIDTH = 1024f;
+    private static final float MENU_HEIGHT = 680f;
+    private static final float MENU_SECTION_IMAGE_SIZE = 80f;
+    private static final float MENU_SECTION_LABEL_PADDING_LEFT = 8f;
+    private static final float MENU_SECTION_PADDING = 8f;
+    private static final float MENU_SECTION_TABLE_PADDING_LEFT = 16f;
+    private static final float MENU_CONTENT_HEIGHT = 650f;
     private static final float MENU_INVENTORY_ITEM_SIZE = 64f;
     private static final float MENU_INVENTORY_ITEM_PADDING = 8f;
     private static final float MENU_ARROW_WIDTH = 16f;
     private static final float MENU_ARROW_HEIGHT = 32f;
-    private static final float MENU_SIDE_TABLE_WIDTH = 200f;
-    private static final float MENU_SIDE_TABLE_HEIGHT = 256f;
-    private static final float MENU_COIN_SIZE = 16f;
-    private static final float MENU_COIN_PADDING = 8f;
+    private static final float MENU_SIDE_TABLE_WIDTH = 500f;
+    private static final float MENU_SIDE_TABLE_HEIGHT = 500f;
+    private static final float MENU_COIN_SIZE = 32f;
+    private static final float MENU_COIN_PADDING = 16f;
     private static final float MENU_BUTTON_WIDTH = 112f;
     private static final float MENU_BUTTON_HEIGHT = 56f;
-    private static final float MENU_CAULDRON_WIDTH = 112f;
-    private static final float MENU_CAULDRON_HEIGHT = 128f;
-    private static final float MENU_CAUDRON_PADDING = 8f;
+    private static final float MENU_TAVERN_WIDTH = 288f;
+    private static final float MENU_TAVERN_HEIGHT = 480f;
+    private static final float MENU_INSTRUMENT_WIDTH = 112f;
+    private static final float MENU_INSTRUMENT_HEIGHT = 128f;
+    private static final float MENU_INSTRUMENT_PADDING = 64f;
+    private static final float MENU_KITCHEN_SHELF_WIDTH = 362f;
+    private static final float MENU_KITCHEN_SHELF_HEIGHT = 16f;
     private static final float MENU_OFFSET_HEIGHT = 64f;
 
     private static GameScreen instance;
@@ -144,13 +147,15 @@ public class GameScreen implements Screen {
     private final VelocityAction playerVelocityAction;
 
     private final Table menuWrapperTable;
+    private final Label inventoryPageLabel;
     private final Image[][] itemImages;
     private final Image[][] itemCursorImages;
-    private final Table cashTable;
-    private final Image cashItemImage;
-    private final Label cashItemLabel;
-    private final Label cashCostLabel;
-    private final Table potionTable;
+    private final Label inventoryItemLabel;
+    private final Image inventoryItemImage;
+    private final Label menuCostLabel;
+    private final TextButton menuButton;
+    private final Table barTable;
+    private final Table kitchenTable;
 
     private final Array<Object> inventory;
     private int inventoryPage;
@@ -477,58 +482,113 @@ public class GameScreen implements Screen {
         final Table menuTable = new Table(MyGdxGame.getInstance().getSkin());
         menuTable.setBackground("menu/background");
 
-        final Table checkBoxTable =
+        final Table sectionTable =
             new Table(MyGdxGame.getInstance().getSkin());
-        checkBoxTable.left().padLeft(MENU_CHECK_BOX_TABLE_PADDING_LEFT);
+        sectionTable.left().padLeft(MENU_SECTION_TABLE_PADDING_LEFT);
 
-        final CheckBox cashCheckBox = new CheckBox(
-                null,
+        final Image shopSectionLockedImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/shop");
+        sectionTable.add(shopSectionLockedImage)
+            .size(112f).pad(MENU_SECTION_PADDING);
+
+        final Table barSectionTable =
+            new Table(MyGdxGame.getInstance().getSkin());
+        barSectionTable.setBackground("menu/section");
+        barSectionTable.setTouchable(Touchable.enabled);
+
+        final Image barSectionImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/bar");
+        barSectionImage.setTouchable(Touchable.disabled);
+        barSectionTable.add(barSectionImage)
+            .size(MENU_SECTION_IMAGE_SIZE, MENU_SECTION_IMAGE_SIZE);
+
+        final Label barSectionLabel = new Label(
+                "Bar",
                 MyGdxGame.getInstance().getSkin(),
-                "cash");
-        cashCheckBox.setChecked(true);
-        cashCheckBox.addListener(new ChangeListener(){
+                "regularSemiSmall");
+        barSectionLabel.setTouchable(Touchable.disabled);
+        barSectionTable.add(barSectionLabel)
+            .padLeft(MENU_SECTION_LABEL_PADDING_LEFT);
+
+        sectionTable.add(barSectionTable).pad(MENU_SECTION_PADDING);
+
+        final Table kitchenSectionTable =
+            new Table(MyGdxGame.getInstance().getSkin());
+        kitchenSectionTable.setBackground("menu/section");
+        kitchenSectionTable.setTouchable(Touchable.enabled);
+
+        final Image kitchenSectionImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/kitchen");
+        kitchenSectionImage.setTouchable(Touchable.disabled);
+        kitchenSectionTable.add(kitchenSectionImage)
+            .size(MENU_SECTION_IMAGE_SIZE, MENU_SECTION_IMAGE_SIZE);
+
+        final Label kitchenSectionLabel = new Label(
+                "",
+                MyGdxGame.getInstance().getSkin(),
+                "regularSemiSmall");
+        kitchenSectionLabel.setTouchable(Touchable.disabled);
+        kitchenSectionTable.add(kitchenSectionLabel)
+            .padLeft(MENU_SECTION_LABEL_PADDING_LEFT);
+
+        sectionTable.add(kitchenSectionTable).pad(MENU_SECTION_PADDING);
+
+        final Image bookSectionLockedImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/book");
+        sectionTable.add(bookSectionLockedImage)
+            .size(112f).pad(MENU_SECTION_PADDING);
+
+        final Image listSectionLockedImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/list");
+        sectionTable.add(listSectionLockedImage)
+            .size(112f).pad(MENU_SECTION_PADDING);
+
+        barSectionTable.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(cashTable != null) {
-                    cashTable.setVisible(true);
-                }
-                if(potionTable != null) {
-                    potionTable.setVisible(false);
+            public void clicked(InputEvent event, float x, float y) {
+                barSectionLabel.setText("Bar");
+                kitchenSectionLabel.setText("");
+
+                barTable.setVisible(true);
+                kitchenTable.setVisible(false);
+
+                menuButton.setText("Sell");
+            }
+        });
+        kitchenSectionTable.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                barSectionLabel.setText("");
+                kitchenSectionLabel.setText("Kitchen");
+
+                barTable.setVisible(false);
+                kitchenTable.setVisible(true);
+
+                if(potionSize == POTION_ITEM_COUNT) {
+                    menuButton.setText("Brew");
+                } else {
+                    menuButton.setText("Throw");
                 }
             }
         });
-        checkBoxTable
-            .add(cashCheckBox)
-            .size(MENU_CHECK_BOX_SIZE)
-            .pad(MENU_CHECK_BOX_PADDING);
 
-        final CheckBox potionCheckBox = new CheckBox(
-                null,
-                MyGdxGame.getInstance().getSkin(),
-                "potion");
-        potionCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(cashTable != null) {
-                    cashTable.setVisible(false);
-                }
-                if(potionTable != null) {
-                    potionTable.setVisible(true);
-                }
-            }
-        });
-        checkBoxTable
-            .add(potionCheckBox)
-            .size(MENU_CHECK_BOX_SIZE)
-            .pad(MENU_CHECK_BOX_PADDING);
-
-        new ButtonGroup<>(cashCheckBox, potionCheckBox);
-
-        menuTable.add(checkBoxTable).growX();
+        menuTable.add(sectionTable).growX();
 
         menuTable.row();
 
         final Table menuContentTable =
+            new Table(MyGdxGame.getInstance().getSkin());
+
+        final Table menuLeftContentTable =
+            new Table(MyGdxGame.getInstance().getSkin());
+
+        inventoryPageLabel =
+            new Label("", MyGdxGame.getInstance().getSkin(), "regularSmall");
+        menuLeftContentTable.add(inventoryPageLabel);
+
+        menuLeftContentTable.row();
+
+        final Table inventoryContentTable =
             new Table(MyGdxGame.getInstance().getSkin());
 
         final Button inventoryLeftButton = new Button(
@@ -541,12 +601,13 @@ public class GameScreen implements Screen {
                 }
             }
         });
-        menuContentTable.add(inventoryLeftButton)
+        inventoryContentTable.add(inventoryLeftButton)
             .size(MENU_ARROW_WIDTH, MENU_ARROW_HEIGHT);
 
         inventory = new Array<>();
         itemImages = new Image[MENU_INVENTORY_ROWS][MENU_INVENTORY_COLUMNS];
-        itemCursorImages = new Image[MENU_INVENTORY_ROWS][MENU_INVENTORY_COLUMNS];
+        itemCursorImages =
+            new Image[MENU_INVENTORY_ROWS][MENU_INVENTORY_COLUMNS];
 
         final Table inventoryTable =
             new Table(MyGdxGame.getInstance().getSkin());
@@ -590,7 +651,7 @@ public class GameScreen implements Screen {
         }
         itemCursorImages[0][0].setVisible(true);
 
-        menuContentTable.add(inventoryTable);
+        inventoryContentTable.add(inventoryTable);
 
         final Button inventoryRightButton = new Button(
                 MyGdxGame.getInstance().getSkin(), "inventoryRight");
@@ -600,113 +661,51 @@ public class GameScreen implements Screen {
                 setInventoryPage(inventoryPage + 1);
             }
         });
-        menuContentTable.add(inventoryRightButton)
+        inventoryContentTable.add(inventoryRightButton)
             .size(MENU_ARROW_WIDTH, MENU_ARROW_HEIGHT);
 
-        cashTable = new Table(MyGdxGame.getInstance().getSkin());
+        menuLeftContentTable.add(inventoryContentTable);
 
-        cashItemImage = new Image();
-        cashTable.add(cashItemImage).size(MENU_INVENTORY_ITEM_SIZE);
+        menuLeftContentTable.row();
 
-        cashTable.row();
-        
-        cashItemLabel = new Label(
-                "",
-                MyGdxGame.getInstance().getSkin(),
-                "regularSmall");
-        cashItemLabel.setAlignment(Align.center);
-        cashItemLabel.setWrap(true);
-        cashTable.add(cashItemLabel).growX();
-
-        cashTable.row();
-
-        final Table cashCostTable =
+        final Table inventoryItemTable =
             new Table(MyGdxGame.getInstance().getSkin());
 
-        cashCostLabel = new Label(
+        inventoryItemLabel = new Label(
                 "",
                 MyGdxGame.getInstance().getSkin(),
                 "regularSmall");
-        cashCostTable.add(cashCostLabel);
+        inventoryItemTable.add(inventoryItemLabel);
 
-        final Image cashCoinImage = new Image(
-                MyGdxGame.getInstance().getSkin(), "coin");
-        cashCostTable
-            .add(cashCoinImage)
-            .size(MENU_COIN_SIZE)
-            .pad(MENU_COIN_PADDING);
+        inventoryItemImage = new Image();
+        inventoryItemTable.add(inventoryItemImage)
+            .size(MENU_INVENTORY_ITEM_SIZE);
 
-        cashTable.add(cashCostTable).fillX();
+        menuLeftContentTable.add(inventoryItemTable);
 
-        cashTable.row();
+        menuLeftContentTable.row();
 
-        final TextButton cashSellButton = new TextButton(
+        final Table sellTable = new Table(MyGdxGame.getInstance().getSkin());
+
+        menuCostLabel =
+            new Label("", MyGdxGame.getInstance().getSkin(), "regularSmall");
+        sellTable.add(menuCostLabel);
+
+        final Image menuCoinImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "coin");
+        sellTable.add(menuCoinImage)
+            .size(MENU_COIN_SIZE).pad(MENU_COIN_PADDING);
+
+        potion = new LootType[POTION_ITEM_COUNT];
+
+        menuButton = new TextButton(
                 "Sell",
                 MyGdxGame.getInstance().getSkin(),
                 "menu");
-        cashSellButton.addListener(new ChangeListener() {
+        menuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                final int index = getInventoryIndex(
-                        inventoryPage,
-                        inventoryCursorRow,
-                        inventoryCursorColumn);
-                if(inventory.size > index) {
-                    final Object item = inventory.get(index);
-                    if(item instanceof LootType) {
-                        money += (int)(
-                                ((LootType)item).getCost()
-                                * popularity
-                                / POPULARITY_MAX);
-                        popularity += ((LootType)item).getPopularity();
-                    } else if(item instanceof PotionType) {
-                        money += (int)(
-                                ((PotionType)item).getCost()
-                                * popularity
-                                / POPULARITY_MAX);
-                        popularity += ((PotionType)item).getPopularity();
-                    }
-                    if(popularity > POPULARITY_MAX) {
-                        popularity = POPULARITY_MAX;
-                    }
-                    inventory.removeIndex(index);
-                    setInventoryPage(inventoryPage);
-                    MyGdxGame.getInstance().playSellSound();
-                }
-            }
-        });
-        cashTable.add(cashSellButton)
-            .size(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT);
-
-        potionTable = new Table(MyGdxGame.getInstance().getSkin());
-        potionTable.setVisible(false);
-
-        final Image potionCauldronImage = new Image(
-                MyGdxGame.getInstance().getSkin(), "menu/cauldron");
-        potionTable.add(potionCauldronImage)
-            .size(MENU_CAULDRON_WIDTH, MENU_CAULDRON_HEIGHT)
-            .pad(MENU_CAUDRON_PADDING);
-
-        potionTable.row();
-
-        potion = new LootType[POTION_ITEM_COUNT];
-        final TextButton potionButton = new TextButton(
-                "Throw",
-                MyGdxGame.getInstance().getSkin(),
-                "menu");
-        potionButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if(potionSize == POTION_ITEM_COUNT) {
-                    potionButton.setText("Throw");
-                    final PotionType potionType = PotionBrew.brew(potion);
-                    if(potionType != null) {
-                        inventory.add(potionType);
-                    }
-                    potionSize = 0;
-                    setInventoryPage(inventoryPage);
-                    MyGdxGame.getInstance().playBrewSound();
-                } else {
+                if(!barSectionLabel.getText().isEmpty()) {
                     final int index = getInventoryIndex(
                             inventoryPage,
                             inventoryCursorRow,
@@ -714,23 +713,108 @@ public class GameScreen implements Screen {
                     if(inventory.size > index) {
                         final Object item = inventory.get(index);
                         if(item instanceof LootType) {
-                            potion[potionSize] = (LootType)item;
-                            potionSize++;
-                            inventory.removeIndex(index);
-                            if(potionSize == POTION_ITEM_COUNT) {
-                                potionButton.setText("Brew");
+                            money += (int)(
+                                    ((LootType)item).getCost()
+                                    * popularity
+                                    / POPULARITY_MAX);
+                            popularity += ((LootType)item).getPopularity();
+                        } else if(item instanceof PotionType) {
+                            money += (int)(
+                                    ((PotionType)item).getCost()
+                                    * popularity
+                                    / POPULARITY_MAX);
+                            popularity += ((PotionType)item).getPopularity();
+                        }
+                        if(popularity > POPULARITY_MAX) {
+                            popularity = POPULARITY_MAX;
+                        }
+                        inventory.removeIndex(index);
+                        setInventoryPage(inventoryPage);
+                        MyGdxGame.getInstance().playSellSound();
+                    }
+                } else if(!kitchenSectionLabel.getText().isEmpty()) {
+                    if(potionSize == POTION_ITEM_COUNT) {
+                        menuButton.setText("Throw");
+                        final PotionType potionType = PotionBrew.brew(potion);
+                        if(potionType != null) {
+                            inventory.add(potionType);
+                        }
+                        potionSize = 0;
+                        setInventoryPage(inventoryPage);
+                        MyGdxGame.getInstance().playBrewSound();
+                    } else {
+                        final int index = getInventoryIndex(
+                                inventoryPage,
+                                inventoryCursorRow,
+                                inventoryCursorColumn);
+                        if(inventory.size > index) {
+                            final Object item = inventory.get(index);
+                            if(item instanceof LootType) {
+                                potion[potionSize] = (LootType)item;
+                                potionSize++;
+                                inventory.removeIndex(index);
+                                if(potionSize == POTION_ITEM_COUNT) {
+                                    menuButton.setText("Brew");
+                                }
+                                setInventoryPage(inventoryPage);
+                                MyGdxGame.getInstance().playThrowSound();
                             }
-                            setInventoryPage(inventoryPage);
-                            MyGdxGame.getInstance().playThrowSound();
                         }
                     }
                 }
             }
         });
-        potionTable.add(potionButton)
+        sellTable.add(menuButton)
             .size(MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT);
 
-        menuContentTable.stack(cashTable, potionTable)
+        menuLeftContentTable.add(sellTable);
+
+        menuContentTable.add(menuLeftContentTable);
+
+        barTable = new Table(MyGdxGame.getInstance().getSkin());
+
+        final Image menuTavernImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/tavern");
+        barTable.add(menuTavernImage)
+            .size(MENU_TAVERN_WIDTH, MENU_TAVERN_HEIGHT);
+
+        kitchenTable = new Table(MyGdxGame.getInstance().getSkin());
+        kitchenTable.setVisible(false);
+
+        final Image cauldronImage =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/cauldron");
+        kitchenTable.add(cauldronImage)
+            .size(MENU_INSTRUMENT_WIDTH, MENU_INSTRUMENT_HEIGHT);
+
+        kitchenTable.add().width(MENU_INSTRUMENT_PADDING);
+
+        kitchenTable.add().size(MENU_INSTRUMENT_WIDTH, MENU_INSTRUMENT_HEIGHT);
+
+        kitchenTable.row();
+
+        Image menuShelf =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/shelf");
+        kitchenTable.add(menuShelf)
+            .colspan(3)
+            .size(MENU_KITCHEN_SHELF_WIDTH, MENU_KITCHEN_SHELF_HEIGHT);
+
+        kitchenTable.row();
+
+        kitchenTable.add().size(MENU_INSTRUMENT_WIDTH, MENU_INSTRUMENT_HEIGHT);
+
+        kitchenTable.add().width(MENU_INSTRUMENT_PADDING);
+
+        kitchenTable.add().size(MENU_INSTRUMENT_WIDTH, MENU_INSTRUMENT_HEIGHT);
+
+        kitchenTable.row();
+
+        menuShelf =
+            new Image(MyGdxGame.getInstance().getSkin(), "menu/shelf");
+        kitchenTable.add(menuShelf)
+            .colspan(3)
+            .size(MENU_KITCHEN_SHELF_WIDTH, MENU_KITCHEN_SHELF_HEIGHT);
+
+        menuContentTable.stack(barTable, kitchenTable)
             .size(MENU_SIDE_TABLE_WIDTH, MENU_SIDE_TABLE_HEIGHT);
 
         setInventoryPage(0);
@@ -900,6 +984,9 @@ public class GameScreen implements Screen {
     }
     
     private void setInventoryPage(int page) {
+        if(page > getMaxInventoryPage()) {
+            page = getMaxInventoryPage();
+        }
         for(int i = 0; i < itemImages.length; i++) {
             for(int j = 0; j < itemImages[i].length; j++) {
                 final int index = getInventoryIndex(page, i, j);
@@ -920,11 +1007,19 @@ public class GameScreen implements Screen {
             }
         }
         inventoryPage = page;
+        inventoryPageLabel.setText((inventoryPage + 1)
+                + "/"
+                + (getMaxInventoryPage() + 1));
         updateCashItem();
     }
 
+    private int getMaxInventoryPage() {
+        return (inventory.size - 1)
+                / (MENU_INVENTORY_ROWS * MENU_INVENTORY_COLUMNS);
+    }
+
     private void updateCashItem() {
-        cashItemImage.setDrawable(
+        inventoryItemImage.setDrawable(
                 itemImages[inventoryCursorRow][inventoryCursorColumn]
                 .getDrawable());
         final int index = getInventoryIndex(
@@ -932,22 +1027,22 @@ public class GameScreen implements Screen {
         if(inventory.size > index) {
             final Object item = inventory.get(index);
             if(item instanceof LootType) {
-                cashItemLabel.setText(((LootType)item).getDescription());
-                cashCostLabel.setText(
+                inventoryItemLabel.setText(((LootType)item).getDescription());
+                menuCostLabel.setText(
                         (int)(
                             ((LootType)item).getCost()
                             * popularity
                             / POPULARITY_MAX));
             } else if(item instanceof PotionType) {
-                cashItemLabel.setText(((PotionType)item).getDescription());
-                cashCostLabel.setText((int)(
+                inventoryItemLabel.setText(((PotionType)item).getDescription());
+                menuCostLabel.setText((int)(
                             ((PotionType)item).getCost()
                             * popularity
                             / POPULARITY_MAX));
             }
         } else {
-            cashItemLabel.setText("No item selected");
-            cashCostLabel.setText("0");
+            inventoryItemLabel.setText("No item selected");
+            menuCostLabel.setText("0");
         }
     }
 
