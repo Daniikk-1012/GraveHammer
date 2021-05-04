@@ -71,6 +71,7 @@ public class GameScreen implements Screen {
     private static final float PLAYER_JUMP_IMPULSE = 512f;
     private static final float PLAYER_VELOCITY = 512f;
     private static final float PLAYER_WALK_ANIMATION_FRAME_DURATION = 0.25f;
+    private static final float PLAYER_COLOR_DURATION = 0.2f;
 
     private static final float HAMMER_WIDTH = 128f;
     private static final float HAMMER_HEIGHT = 256f;
@@ -1384,6 +1385,12 @@ public class GameScreen implements Screen {
                     if(actor == playerGroup) {
                         if(zombieCountMax > ZOMBIE_COUNT_MAX_MIN) {
                             playerHealth -= ZOMBIE_DAMAGE;
+                            playerGroup.setColor(1f, 1f, 1f, 0f);
+                            playerGroup.addAction(
+                                    Actions.alpha(
+                                        1f,
+                                        PLAYER_COLOR_DURATION,
+                                        Interpolation.fade));
                             killZombie(zombieState,
                                     zombieGroup,
                                     zombieVelocityAction,
