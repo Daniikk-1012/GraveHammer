@@ -3,9 +3,9 @@ d:img:img:0:application/unknown:1
 d:img/fnt:img/fnt:0:application/unknown:1
 t:img/fnt/regular.fnt:img/fnt/regular-166c95c4bdfe1e87a33cc40aeeb3824f.fnt:59870:application/unknown:1
 i:img/fnt/regular.png:img/fnt/regular-5f66870ed07159abf9c11bb8c2169698.png:22678:image/png:1
-i:img/skin.png:img/skin-999394c131493c3e030031fa0c5fcccf.png:858485:image/png:1
-t:img/skin.atlas:img/skin-e55d6ae7cdb3738e53fa09f9cb2fe818.atlas:4199:application/unknown:1
-b:img/skin.skin:img/skin-7a10c775aafccb65336a597fe65c97a0.skin:1211:application/unknown:1
+b:img/skin.skin:img/skin-ac19477ee77051a10db09048ab25636c.skin:1252:application/unknown:1
+i:img/skin.png:img/skin-b586877fce6ad2b05b33fd5404aa69e8.png:866394:image/png:1
+t:img/skin.atlas:img/skin-9d281f89507a66d7fd9ece49c745e9aa.atlas:4825:application/unknown:1
 d:particle:particle:0:application/unknown:1
 b:particle/hit:particle/hit-68f2c08c45e3e488f3765a3e8cfbf79d:2190:application/unknown:1
 d:snd:snd:0:application/unknown:1

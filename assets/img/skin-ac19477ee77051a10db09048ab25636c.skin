@@ -1,0 +1,61 @@
+{
+    Color: {
+        grey: {
+            hex: #4e4e4e
+        }
+    }
+    BitmapFont: {
+        regularSmall: {
+            file: fnt/regular.fnt
+            scaledSize: 16
+            markupEnabled: true
+        }
+        regularSemiSmall: {
+            file: fnt/regular.fnt
+            scaledSize: 32
+            markupEnabled: true
+        }
+        regularMedium: {
+            file: fnt/regular.fnt
+            scaledSize: 64
+            markupEnabled: true
+        }
+    }
+    LabelStyle: {
+        regularSmall: {
+            font: regularSmall
+            fontColor: grey
+        }
+        regularSemiSmall: {
+            font: regularSemiSmall
+            fontColor: grey
+        }
+        regularMedium: {
+            font: regularMedium
+            fontColor: grey
+        }
+    }
+    ButtonStyle: {
+        inventoryLeft: {
+            up: menu/left
+        }
+        inventoryRight: {
+            up: menu/right
+        }
+        html: {
+            up: html/button
+        }
+    }
+    TextButtonStyle: {
+        menu: {
+            up: menu/button
+            font: regularSmall
+            fontColor: grey
+        }
+        button: {
+            up: button
+            font: regularSmall
+            fontColor: grey
+        }
+    }
+}
