@@ -129,6 +129,8 @@ public class GameScreen implements Screen {
     private static final float MENU_KITCHEN_SHELF_HEIGHT = 16f;
     private static final float MENU_OFFSET_HEIGHT = 64f;
 
+    private static final float TUTORIAL_LABEL_WIDTH = 1024f;
+
     private static GameScreen instance;
 
     public static GameScreen getInstance() {
@@ -156,6 +158,8 @@ public class GameScreen implements Screen {
     private final TextButton menuButton;
     private final Table barTable;
     private final Table kitchenTable;
+
+    private final Label tutorialLabel;
 
     private final Array<Object> inventory;
     private int inventoryPage;
@@ -474,6 +478,19 @@ public class GameScreen implements Screen {
 
         uiStage.addActor(hudTable);
 
+        final Table tutorialTable =
+            new Table(MyGdxGame.getInstance().getSkin());
+        tutorialTable.top();
+        tutorialTable.setFillParent(true);
+
+        tutorialLabel = new Label(
+                "", MyGdxGame.getInstance().getSkin(), "regularSemiSmall");
+        tutorialLabel.setWrap(true);
+        tutorialLabel.setAlignment(Align.center);
+        tutorialTable.add(tutorialLabel).width(TUTORIAL_LABEL_WIDTH);
+
+        uiStage.addActor(tutorialTable);
+
         menuWrapperTable =
             new Table(MyGdxGame.getInstance().getSkin());
         menuWrapperTable.setFillParent(true);
@@ -706,31 +723,36 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if(!barSectionLabel.getText().isEmpty()) {
-                    final int index = getInventoryIndex(
-                            inventoryPage,
-                            inventoryCursorRow,
-                            inventoryCursorColumn);
-                    if(inventory.size > index) {
-                        final Object item = inventory.get(index);
-                        if(item instanceof LootType) {
-                            money += (int)(
-                                    ((LootType)item).getCost()
-                                    * popularity
-                                    / POPULARITY_MAX);
-                            popularity += ((LootType)item).getPopularity();
-                        } else if(item instanceof PotionType) {
-                            money += (int)(
-                                    ((PotionType)item).getCost()
-                                    * popularity
-                                    / POPULARITY_MAX);
-                            popularity += ((PotionType)item).getPopularity();
+                    if(zombieCountMax > ZOMBIE_COUNT_MAX_MIN ||
+                            inventory.size > 0
+                            && inventory.get(0) == PotionType.BIG_BABY_HEAD) {
+                        final int index = getInventoryIndex(
+                                inventoryPage,
+                                inventoryCursorRow,
+                                inventoryCursorColumn);
+                        if(inventory.size > index) {
+                            final Object item = inventory.get(index);
+                            if(item instanceof LootType) {
+                                money += (int)(
+                                        ((LootType)item).getCost()
+                                        * popularity
+                                        / POPULARITY_MAX);
+                                popularity += ((LootType)item).getPopularity();
+                            } else if(item instanceof PotionType) {
+                                money += (int)(
+                                        ((PotionType)item).getCost()
+                                        * popularity
+                                        / POPULARITY_MAX);
+                                popularity +=
+                                    ((PotionType)item).getPopularity();
+                            }
+                            if(popularity > POPULARITY_MAX) {
+                                popularity = POPULARITY_MAX;
+                            }
+                            inventory.removeIndex(index);
+                            setInventoryPage(inventoryPage);
+                            MyGdxGame.getInstance().playSellSound();
                         }
-                        if(popularity > POPULARITY_MAX) {
-                            popularity = POPULARITY_MAX;
-                        }
-                        inventory.removeIndex(index);
-                        setInventoryPage(inventoryPage);
-                        MyGdxGame.getInstance().playSellSound();
                     }
                 } else if(!kitchenSectionLabel.getText().isEmpty()) {
                     if(potionSize == POTION_ITEM_COUNT) {
@@ -879,7 +901,9 @@ public class GameScreen implements Screen {
                                 && playerGroup.getY() < houseImage.getTop()
                                 && playerGroup.getTop() > houseImage.getY()
                                 && hammerAnimationTime
-                                >= HAMMER_ANIMATION_TIME) {
+                                >= HAMMER_ANIMATION_TIME
+                                && (zombieCountMax > ZOMBIE_COUNT_MAX_MIN
+                                    || inventory.size == ZOMBIE_COUNT_MAX_MIN)) {
                             inMenu = true;
                             keyA = false;
                             keyD = false;
@@ -890,15 +914,23 @@ public class GameScreen implements Screen {
                         }
                         return true;
                     case Input.Keys.ESCAPE:
-                        inMenu = false;
-                        if(zombieCount >= zombieCountMax
-                                && zombieKilledCount >= zombieCount) {
-                            menuWrapperTable.setVisible(false);
-                            eImage.setVisible(false);
-                            playerGroup.setVisible(true);
-                            MyGdxGame.getInstance().stopBarMusic();
-                            MyGdxGame.getInstance().playWaveMusic();
-                            newWave();
+                        if(zombieCountMax > ZOMBIE_COUNT_MAX_MIN
+                                || inventory.size == 0
+                                && money > 0) {
+                            inMenu = false;
+                            if(zombieCount >= zombieCountMax
+                                    && zombieKilledCount >= zombieCount) {
+                                menuWrapperTable.setVisible(false);
+                                eImage.setVisible(false);
+                                playerGroup.setVisible(true);
+                                MyGdxGame.getInstance().stopBarMusic();
+                                MyGdxGame.getInstance().playWaveMusic();
+                                if(zombieCountMax == ZOMBIE_COUNT_MAX_MIN) {
+                                    MyGdxGame.getInstance().setScreen(
+                                            TutorialScreen.getInstance());
+                                }
+                                newWave();
+                            }
                         }
                         return true;
                 }
@@ -1090,17 +1122,27 @@ public class GameScreen implements Screen {
             }
             clearArea();
         }
-        if(zombieCount >= zombieCountMax && zombieKilledCount >= zombieCount) {
+        if(zombieCountMax > ZOMBIE_COUNT_MAX_MIN
+                && zombieCount >= zombieCountMax
+                && zombieKilledCount >= zombieCount) {
             eImage.setVisible(true);
             MyGdxGame.getInstance().stopWaveMusic();
             MyGdxGame.getInstance().playBarMusic();
         }
     }
 
+    public void setTutorialText(String text) {
+        tutorialLabel.setText(text);
+    }
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(uiStage);
-        MyGdxGame.getInstance().playWaveMusic();
+        if(zombieCount < zombieCountMax || zombieKilledCount < zombieCount) {
+            MyGdxGame.getInstance().playWaveMusic();
+        } else {
+            MyGdxGame.getInstance().playBarMusic();
+        }
     }
 
     @Override
@@ -1239,6 +1281,16 @@ public class GameScreen implements Screen {
                 @Override
                 public boolean onOverlap(Actor actor) {
                     if(hammerHit && actor == hammerTriggerActor) {
+                        final LootType lootType;
+                        if(zombieCountMax > ZOMBIE_COUNT_MAX_MIN) {
+                            lootType = LootType.values()[
+                                MathUtils.random(
+                                        0,
+                                        LootType.values().length - 1)];
+                        } else {
+                            lootType = LootType.BRAIN;
+                        }
+
                         killZombie(zombieState,
                                 zombieGroup,
                                 zombieVelocityAction,
@@ -1248,9 +1300,6 @@ public class GameScreen implements Screen {
                                 zombieHammerOverlapRepeatAction,
                                 zombiePlayerOverlapRepeatAction,
                                 zombieSequenceAction);
-
-                        final LootType lootType = LootType.values()[
-                            MathUtils.random(0, LootType.values().length - 1)];
 
                         final Image lootImage = new Image(
                                 MyGdxGame.getInstance().getSkin(),
@@ -1297,6 +1346,21 @@ public class GameScreen implements Screen {
                                     @Override
                                     public boolean onOverlap(Actor actor) {
                                         if(actor == playerGroup) {
+                                            if(zombieCountMax
+                                                    == ZOMBIE_COUNT_MAX_MIN
+                                                    && zombieCount
+                                                    >= zombieCountMax
+                                                    && zombieKilledCount
+                                                    >= zombieCount
+                                                    && inventory.size
+                                                    == ZOMBIE_COUNT_MAX_MIN
+                                                    - 1) {
+                                                eImage.setVisible(true);
+                                                MyGdxGame.getInstance()
+                                                    .setScreen(
+                                                            TutorialScreen
+                                                            .getInstance());
+                                            }
                                             lootImage.clear();
                                             lootImage.remove();
                                             inventory.add(lootType);
@@ -1318,16 +1382,18 @@ public class GameScreen implements Screen {
                 @Override
                 public boolean onOverlap(Actor actor) {
                     if(actor == playerGroup) {
-                        playerHealth -= ZOMBIE_DAMAGE;
-                        killZombie(zombieState,
-                                zombieGroup,
-                                zombieVelocityAction,
-                                zombieAccelerationAction,
-                                zombieControlRepeatAction,
-                                zombieStopOverlapRepeatAction,
-                                zombieHammerOverlapRepeatAction,
-                                zombiePlayerOverlapRepeatAction,
-                                zombieSequenceAction);
+                        if(zombieCountMax > ZOMBIE_COUNT_MAX_MIN) {
+                            playerHealth -= ZOMBIE_DAMAGE;
+                            killZombie(zombieState,
+                                    zombieGroup,
+                                    zombieVelocityAction,
+                                    zombieAccelerationAction,
+                                    zombieControlRepeatAction,
+                                    zombieStopOverlapRepeatAction,
+                                    zombieHammerOverlapRepeatAction,
+                                    zombiePlayerOverlapRepeatAction,
+                                    zombieSequenceAction);
+                        }
                         return true;
                     }
                     return false;
@@ -1404,6 +1470,11 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(null);
         MyGdxGame.getInstance().stopWaveMusic();
         MyGdxGame.getInstance().stopBarMusic();
+        keyA = false;
+        keyD = false;
+        keyLeft = false;
+        keyRight = false;
+        MyGdxGame.getInstance().stopStepMusic();
     }
 
     @Override

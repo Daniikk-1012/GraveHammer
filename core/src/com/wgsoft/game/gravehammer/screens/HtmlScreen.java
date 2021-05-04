@@ -50,7 +50,7 @@ public class HtmlScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 MyGdxGame.getInstance().initializeSounds();
-                MyGdxGame.getInstance().setScreen(GameScreen.getInstance());
+                MyGdxGame.getInstance().setScreen(TutorialScreen.getInstance());
             }
         });
         rootTable.add(button)

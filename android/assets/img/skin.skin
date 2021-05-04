@@ -52,5 +52,10 @@
             font: regularSmall
             fontColor: grey
         }
+        button: {
+            up: button
+            font: regularSmall
+            fontColor: grey
+        }
     }
 }

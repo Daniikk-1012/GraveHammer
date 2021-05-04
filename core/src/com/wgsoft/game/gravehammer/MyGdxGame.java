@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ParticleEffectActor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.wgsoft.game.gravehammer.screens.GameScreen;
 import com.wgsoft.game.gravehammer.screens.HtmlScreen;
+import com.wgsoft.game.gravehammer.screens.TutorialScreen;
 
 public class MyGdxGame extends Game {
     public static final float WIDTH = 1920f;
@@ -69,7 +70,7 @@ public class MyGdxGame extends Game {
                 Gdx.files.internal("particle/hit"), skin.getAtlas());
 
         if(Gdx.app.getType() != Application.ApplicationType.WebGL) {
-            setScreen(GameScreen.getInstance());
+            setScreen(TutorialScreen.getInstance());
         } else {
             setScreen(HtmlScreen.getInstance());
         }
@@ -101,6 +102,7 @@ public class MyGdxGame extends Game {
         super.dispose();
 
         HtmlScreen.getInstance().dispose();
+        TutorialScreen.getInstance().dispose();
         GameScreen.getInstance().dispose();
 
         hitParticleEffectActor.dispose();
