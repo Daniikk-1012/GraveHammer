@@ -488,6 +488,7 @@ public class GameScreen implements Screen {
                 "", MyGdxGame.getInstance().getSkin(), "regularSemiSmall");
         tutorialLabel.setWrap(true);
         tutorialLabel.setAlignment(Align.center);
+        tutorialLabel.setColor(1f, 1f, 1f, 0.5f);
         tutorialTable.add(tutorialLabel).width(TUTORIAL_LABEL_WIDTH);
 
         uiStage.addActor(tutorialTable);
