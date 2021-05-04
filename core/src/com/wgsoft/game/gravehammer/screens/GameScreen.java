@@ -132,6 +132,10 @@ public class GameScreen implements Screen {
 
     private static final float TUTORIAL_LABEL_WIDTH = 1024f;
 
+    private static final float POPUP_LABEL_WIDTH = 1024f;
+    private static final float POPUP_SHIFT = -32f;
+    private static final float POPUP_DURATION = 1.25f;
+
     private static GameScreen instance;
 
     public static GameScreen getInstance() {
@@ -735,18 +739,39 @@ public class GameScreen implements Screen {
                         if(inventory.size > index) {
                             final Object item = inventory.get(index);
                             if(item instanceof LootType) {
-                                money += (int)(
-                                        ((LootType)item).getCost()
-                                        * popularity
-                                        / POPULARITY_MAX);
+                                final int moneyAdd = ((LootType)item).getCost()
+                                    * popularity
+                                    / POPULARITY_MAX;
+                                money += moneyAdd;
                                 popularity += ((LootType)item).getPopularity();
+                                showPopup("+"
+                                        + moneyAdd
+                                        + " money, "
+                                        + (((LootType)item).getPopularity() >= 0
+                                            ? "+"
+                                            : "-")
+                                        + ((LootType)item).getPopularity()
+                                        + "% popularity");
                             } else if(item instanceof PotionType) {
+                                final int moneyAdd =
+                                    ((PotionType)item).getCost()
+                                    * popularity
+                                    / POPULARITY_MAX;
                                 money += (int)(
                                         ((PotionType)item).getCost()
                                         * popularity
                                         / POPULARITY_MAX);
                                 popularity +=
                                     ((PotionType)item).getPopularity();
+                                showPopup("+"
+                                        + moneyAdd
+                                        + " money, "
+                                        + (((PotionType)item).getPopularity()
+                                            >= 0
+                                            ? "+"
+                                            : "-")
+                                        + ((PotionType)item).getPopularity()
+                                        + "% popularity");
                             }
                             if(popularity > POPULARITY_MAX) {
                                 popularity = POPULARITY_MAX;
@@ -762,6 +787,9 @@ public class GameScreen implements Screen {
                         final PotionType potionType = PotionBrew.brew(potion);
                         if(potionType != null) {
                             inventory.add(potionType);
+                            showPopup("Success");
+                        } else {
+                            showPopup("Failed");
                         }
                         potionSize = 0;
                         setInventoryPage(inventoryPage);
@@ -1135,6 +1163,31 @@ public class GameScreen implements Screen {
 
     public void setTutorialText(String text) {
         tutorialLabel.setText(text);
+    }
+
+    private void showPopup(String text) {
+        final Label popupLabel = new Label(
+                text, MyGdxGame.getInstance().getSkin(), "regularMedium");
+        popupLabel.setSize(POPUP_LABEL_WIDTH, uiStage.getHeight());
+        popupLabel.setPosition(
+                uiStage.getWidth() / 2f,
+                uiStage.getHeight() / 2f,
+                Align.center);
+        popupLabel.setAlignment(Align.center | Align.top);
+        popupLabel.addAction(
+                Actions.sequence(
+                    Actions.parallel(
+                        Actions.moveBy(
+                            0f,
+                            POPUP_SHIFT,
+                            POPUP_DURATION,
+                            Interpolation.fade),
+                        Actions.alpha(
+                            0f,
+                            POPUP_DURATION,
+                            Interpolation.fade)),
+                    Actions.removeActor()));
+        uiStage.addActor(popupLabel);
     }
 
     @Override
