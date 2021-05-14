@@ -1,15 +1,14 @@
 package com.wgsoft.game.gravehammer.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.wgsoft.game.gravehammer.MyGdxGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		final LwjglApplicationConfiguration config
-            = new LwjglApplicationConfiguration();
-        config.title = "Grave Hammer";
-        config.forceExit = false;
-		new LwjglApplication(MyGdxGame.getInstance(), config);
+		final Lwjgl3ApplicationConfiguration config
+            = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("Grave Hammer");
+		new Lwjgl3Application(MyGdxGame.getInstance(), config);
 	}
 }
