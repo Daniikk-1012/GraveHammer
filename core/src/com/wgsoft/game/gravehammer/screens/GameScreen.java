@@ -1168,6 +1168,7 @@ public class GameScreen implements Screen {
     private void showPopup(String text) {
         final Label popupLabel = new Label(
                 text, MyGdxGame.getInstance().getSkin(), "regularMedium");
+        popupLabel.setTouchable(Touchable.disabled);
         popupLabel.setSize(POPUP_LABEL_WIDTH, uiStage.getHeight());
         popupLabel.setPosition(
                 uiStage.getWidth() / 2f,
